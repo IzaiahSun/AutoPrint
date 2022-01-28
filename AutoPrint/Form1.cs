@@ -93,7 +93,17 @@ namespace AutoPrint
             string filePath = e.FullPath;
             string fileName = Path.GetFileName(filePath);
             IPrinter printer = new Printer();
-            printer.PrintRawFile(selectedPrinter, filePath, fileName);
+            while (true)
+            {
+                try
+                {
+                    printer.PrintRawFile(selectedPrinter, filePath, fileName);
+                    break;
+                }catch(IOException exception)
+                {
+                    Thread.Sleep(1000);
+                }
+            }
             m_SyncContext.Post(AppendLogSafePost, $"Printed: {e.FullPath}\n");
         }
 
